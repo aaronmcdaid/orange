@@ -71,17 +71,7 @@ int main () {
     }
 
     TEST_ME ( "|concat with refs. side-effects."
-            , std::vector<int>{200,201,202}
-            ) ^ []()
-            { return std::vector<int>{200,201,202}; };
-
-    TEST_ME ( "|concat with refs. side-effects."
-            , std::vector<int>{200,202}
-            ) ^ []()
-            { return std::vector<int>{200,201,202}; };
-
-    TEST_ME ( "|concat with refs. side-effects."
-            , std::vector<int>{200,202}
+            , std::vector<double>{1.5,3,4.5}
             ) ^ []()
             {
                 int a[]{1,2,3};
