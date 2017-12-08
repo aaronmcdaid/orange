@@ -15,6 +15,22 @@ using TEST_ME::test_me;
 
 using cambda::operator"" _cambda;
 
+namespace std {
+
+template<typename T, size_t N>
+std::ostream& operator<< (std::ostream &o, std::array<T, N> const &arr)
+{
+    o << '[';
+    for(auto it = begin(arr); it != end(arr); ++it)
+    {
+        if(it != begin(arr))
+            o << ',';
+        o << *it;
+    }
+    o << ']';
+    return o;
+}
+}
 
 int main () {
 
