@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:aaronmcdaid/cambda.git
+	branch = master
+	commit = aa5a5811ec96b38ca1b9ce456e406cf148e8f243
+	parent = a6627ee5289ab1a6aef7de91e01fb3aeb3cd7a5d
+	cmdver = 0.3.1
