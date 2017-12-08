@@ -1,4 +1,5 @@
 #include "orange.hh"
+#include "cambda/cambda.hh"
 #include "../module-bits.and.pieces/PP.hh"
 #include "../module-bits.and.pieces/utils.hh"
 #include "../module-TEST_ME/TEST_ME.hh"
@@ -11,6 +12,8 @@ using namespace orange;
 using utils:: operator<<;
 using utils:: type_as_string;
 using TEST_ME::test_me;
+
+using cambda::operator"" _cambda;
 
 
 int main () {
@@ -79,6 +82,18 @@ int main () {
                 a
                     |mapr|
                         [](auto x){return x * 1.5;}
+                    |collect;
+            };
+
+    TEST_ME ( "simple use of cambda"
+            , std::vector<int>{2,4,6}
+            ) ^ []()
+            {
+                int a[]{1,2,3};
+                return
+                a
+                    |mapr|
+                        "(lambda [x] [{2 * x}])"_cambda()
                     |collect;
             };
 }
