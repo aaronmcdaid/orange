@@ -125,5 +125,20 @@ int main () {
                     | collect_at_most<100>;
                 return res;
             };
+
 }
 
+namespace testing_namespace
+{
+    constexpr auto
+    test_simple_map()
+    {
+        int arr[]{1,2,3};
+        return
+            arr
+                |mapr|
+                    "(lambda [x] [{x * 10}])"_cambda()
+                |collect_at_most<100>;
+    };
+    static_assert(test_simple_map() == make_compact_vector_with_max_size(10,20,30) ,"");
+}
