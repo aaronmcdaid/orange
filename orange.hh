@@ -1553,11 +1553,9 @@ namespace orange {
         type_of_tuple m_ranges;
 
         template< typename ... Ts
-            , std::enable_if_t<
-                    sizeof...(Ts) == sizeof...(Rs)
-                    &&
+            , typename = std::enable_if_t<
                     all_true(std::is_same<std::decay_t<Ts>, std::decay_t<Rs> >{} ...)
-                >* =nullptr
+                >
             >
         constexpr
         zip_t(Ts && ... ts) : m_ranges(std::forward<Ts>(ts)...) {}
