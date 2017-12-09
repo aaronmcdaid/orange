@@ -923,9 +923,20 @@ namespace orange {
         T m_data[N];
         size_t m_current_size;
 
-        constexpr
-        vector_with_max_size() : m_data{}, m_current_size(0) {}
+        constexpr vector_with_max_size() : m_data{}, m_current_size(0) {}
+
+        template<typename ... U>
+        constexpr vector_with_max_size(U ... u) : m_data{u...}, m_current_size(sizeof...(u)) {}
     };
+
+    template< typename T, typename ... Us>
+    auto constexpr
+    make_compact_vector_with_max_size(T t, Us ... us)
+    -> vector_with_max_size<T, 1+sizeof...(us)>
+    {
+        (void)t;
+        return {t,us...};
+    }
 
     template< typename VectorLikeType, typename T , size_t N >
     auto constexpr
