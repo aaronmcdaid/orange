@@ -953,6 +953,20 @@ namespace orange {
         return true;
     }
 
+    template< typename Tl , size_t Nl
+            , typename Tr , size_t Nr >
+    auto constexpr
+    operator==( vector_with_max_size<Tl,Nl> const & l, vector_with_max_size<Tr,Nr> const & r )
+    -> bool
+    {
+        if(l.m_current_size != r.m_current_size)
+            return false;
+        for(size_t i = 0; i < l.m_current_size; ++i)
+            if(l.m_data[i] != r.m_data[i])
+                return false;
+        return true;
+    }
+
     template< typename T
             , size_t N
             , typename StreamType
