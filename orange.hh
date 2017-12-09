@@ -926,7 +926,8 @@ namespace orange {
         constexpr vector_with_max_size() : m_data{}, m_current_size(0) {}
 
         template<typename ... U>
-        constexpr vector_with_max_size(U ... u) : m_data{u...}, m_current_size(sizeof...(u)) {}
+        constexpr vector_with_max_size(U ... u) : m_data{u...}, m_current_size(sizeof...(u))
+        { static_assert( all_true(std::is_same<T, U>{}...) ,""); }
 
         auto constexpr
         begin()
