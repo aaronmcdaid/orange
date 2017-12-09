@@ -2,7 +2,6 @@
 #include "cambda/cambda.hh"
 #include "../module-bits.and.pieces/PP.hh"
 #include "../module-bits.and.pieces/utils.hh"
-#include "../module-TEST_ME/TEST_ME.hh"
 #include<iostream>
 #include<vector>
 #include<memory>
@@ -11,7 +10,6 @@ using std:: string;
 using namespace orange;
 using utils:: operator<<;
 using utils:: type_as_string;
-using TEST_ME::test_me;
 
 using cambda::operator"" _cambda;
 
@@ -88,30 +86,6 @@ int main () {
             };
         PP(ar|collect);
     }
-
-    TEST_ME ( "|concat with refs. side-effects."
-            , std::vector<double>{1.5,3,4.5}
-            ) ^ []()
-            {
-                int a[]{1,2,3};
-                return
-                a
-                    |mapr|
-                        [](auto x){return x * 1.5;}
-                    |collect;
-            };
-
-    TEST_ME ( "simple use of cambda"
-            , std::array<int, 3>{{2,4,6}}
-            ) ^ []()
-            {
-                std::array<int, 3> a{{1,2,3}};
-                a
-                    |foreach|
-                        "(lambda [x] [(= x {x * 2})])"_cambda()
-                        ;
-                return a;
-            };
 }
 
 namespace testing_namespace
