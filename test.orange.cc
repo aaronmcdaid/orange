@@ -30,6 +30,56 @@ std::ostream& operator<< (std::ostream &o, std::array<T, N> const &arr)
 }
 }
 
+template<typename It>
+It constexpr
+cx_partition(It b, It e)
+{
+    // Actually, these first two 'ifs' will never be satisfied.
+    // So they're not really interesting at all.
+    if(b==e)
+        return b;
+    if(b+1 == e)
+        return b;
+
+    // ... in other words, there will always be at least
+    // two items in this. And the returned iterator will
+    // always point to an item (*not* to one-past-the-end)
+
+    while(b+1 != e) // while there are at least two elements
+    {
+        if(*(b+1) < *b)
+        {
+            cx_swap(*(b+1),*b);
+            ++b;
+            continue;
+        }
+        else
+        {
+            if(b+1 != e-1) // so it doesn't swap with itself
+                cx_swap(*(b+1), *(e-1));
+            --e;
+            continue;
+        }
+    }
+    return b;
+}
+
+template<typename It>
+void constexpr
+cx_sort(It const b, It const e) // constexpr sort
+{
+    if(b==e)
+        return; // empty range
+    if(b+1 == e)
+        return; // just one item
+
+    auto p = cx_partition(b, e);
+    (void)p;
+    cx_sort(b, p);
+    cx_sort(p+1, e);
+}
+
+constexpr
 auto test_zip_sorted_in_place()
 {
     // sorting in place
@@ -39,18 +89,18 @@ auto test_zip_sorted_in_place()
 
     auto ar = zip(ai, ac, ad);
 
-    std:: sort(begin(ar), end(ar));
+    cx_sort   (begin(ar), end(ar));
 
     auto res =
     ar
         |mapr|
-            apply_pack % "{[i c d] / [d]}"_cambda()
+            apply_pack % "{[_ _ d] / [d]}"_cambda()
         |collect_at_most<10>;
     return res;
 }
 
 int main () {
-    assert(test_zip_sorted_in_place() == make_compact_vector_with_max_size(0.3,0.5,0.1,0.6,0.2,0.4));
+    static_assert(test_zip_sorted_in_place() == make_compact_vector_with_max_size(0.3,0.5,0.1,0.6,0.2,0.4), "");
 
 
     PP(replicate(5, std::string("five")) | collect);

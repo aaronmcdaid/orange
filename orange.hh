@@ -1477,16 +1477,24 @@ namespace std {
         using difference_type = int;
         using iterator_category  = std::random_access_iterator_tag;
     };
+
+    template<typename T>
+    void constexpr
+    cx_swap(T &l, T &r)
+    { auto t = l; l=r; r=t; }
+
     template<size_t ... I, typename ...T>
-    void
-    swap_helper(std::index_sequence<I...>, std::tuple<T...> l, std::tuple<T...> r) {
-        using std::swap;
-        orange_utils:: ignore( (void(swap( std::get<I>(l) , std:: get<I>(r) )),0) ... );
+    void constexpr
+    cx_swap_helper(std::index_sequence<I...>, std::tuple<T...> l, std::tuple<T...> r) {
+        orange_utils:: ignore( (void(cx_swap( std::get<I>(l) , std:: get<I>(r) )),0) ... );
     }
     template<typename ...T>
-    void
-    swap(std::tuple<T...> l, std::tuple<T...> r) {
-        swap_helper(std::make_index_sequence< std::tuple_size<decltype(r)>{} >{}, l,r);
+    auto constexpr
+    cx_swap(std::tuple<T...> l, std::tuple<T...> r)
+    -> std::enable_if_t< orange::all_true(std::is_lvalue_reference<T>{}...) >
+    {
+        static_assert(orange::all_true(std::is_lvalue_reference<T>{}...) ,"");
+        cx_swap_helper(std::make_index_sequence< std::tuple_size<decltype(r)>{} >{}, l,r);
     }
 }
 namespace orange {
