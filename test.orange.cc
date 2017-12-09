@@ -141,4 +141,17 @@ namespace testing_namespace
                 |collect_at_most<100>;
     };
     static_assert(test_simple_map() == make_compact_vector_with_max_size(10,20,30) ,"");
+
+    auto constexpr
+    test_assign_in_vector()
+    {
+        auto d = make_compact_vector_with_max_size(10,20,30);
+        d
+            |foreach|
+                "(lambda [x] [(assign x {x * 3})])"_cambda()
+            ;
+        return d;
+    };
+
+    static_assert(test_assign_in_vector() == make_compact_vector_with_max_size(30,60,90) ,"");
 }
