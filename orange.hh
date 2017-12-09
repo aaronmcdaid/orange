@@ -1801,8 +1801,8 @@ namespace orange {
                 , size_t ... I
                 > auto constexpr
         call(std::index_sequence<I...>, Tup && tup) const
-        ->decltype(m_f( std::template get<I>( tup ) ...))
-        {   return m_f( std::template get<I>( tup ) ...); }
+        ->decltype(m_f( std::template get<I>( std::forward<Tup>(tup) ) ...))
+        {   return m_f( std::template get<I>( std::forward<Tup>(tup) ) ...); }
 
         template<typename Tup>
         auto constexpr
