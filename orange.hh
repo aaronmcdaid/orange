@@ -927,7 +927,28 @@ namespace orange {
 
         template<typename ... U>
         constexpr vector_with_max_size(U ... u) : m_data{u...}, m_current_size(sizeof...(u)) {}
+
+        auto constexpr
+        begin()
+        -> T *
+        { return &m_data[0]; }
+
+        auto constexpr
+        end()
+        -> T *
+        { return &m_data[m_current_size]; }
+
+        auto constexpr
+        begin() const
+        -> T const *
+        { return &m_data[0]; }
+
+        auto constexpr
+        end() const
+        -> T const *
+        { return &m_data[m_current_size]; }
     };
+
 
     template< typename T, typename ... Us>
     auto constexpr
