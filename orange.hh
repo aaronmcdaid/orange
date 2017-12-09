@@ -904,6 +904,59 @@ namespace orange {
 
 
     /*
+     * vector_with_max_size
+     *  This will be useful in 'collect_at_most'. It's like std::vector, but we
+     *  have to have a maximum size in order to make it constexpr-friendly.
+     *  I wouldn't expect this to be used in real code, it's just something
+     *  convenient for use in compile-time testing.
+     */
+
+    template< typename T
+            , size_t N >
+    struct vector_with_max_size // somewhat similar to std::vector, but fully constexpr
+    {
+        T m_data[N];
+        size_t m_current_size;
+
+        constexpr
+        vector_with_max_size() : m_data{}, m_current_size(0) {}
+    };
+
+    template< typename VectorLikeType, typename T , size_t N >
+    auto constexpr
+    operator==( vector_with_max_size<T,N> const & answer, VectorLikeType const & expected)
+    -> decltype( void(expected.size()), void(expected.at(0)) , bool{} )
+    // the return type is simply 'bool'. The above is a bit of SFINAE to ensure
+    // the VectorLikeType value has methods for .size() and .at(i).
+    {
+        if(answer.m_current_size != expected.size())
+            return false;
+        for(size_t i = 0; i < answer.m_current_size; ++i)
+            if(answer.m_data[i] != expected.at(i))
+                return false;
+        return true;
+    }
+
+    template< typename T
+            , size_t N
+            , typename StreamType
+            , typename = decltype( std::declval<StreamType>() << "" ) // SFINAE if StreamType can't accept <<
+            >
+    StreamType & operator<< (StreamType &o, vector_with_max_size<T,N> const &v)
+    {
+        (void)v;
+        o << '[';
+        for(size_t i = 0; i < v.m_current_size; ++i)
+        {
+            if(i!=0)
+                o << ',';
+            o << v.m_data[i];
+        }
+        o << ']';
+        return o;
+    }
+
+    /*
      * Now, to start defining the various  |operations|
      */
 
