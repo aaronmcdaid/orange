@@ -112,20 +112,6 @@ int main () {
                         ;
                 return a;
             };
-
-    TEST_ME ( "collectAtMost"
-            , std::vector<double>{1.5,3,4.5}
-            ) ^ []()
-            {
-                int a[]{1,2,3};
-                auto res =
-                a
-                    |mapr|
-                        [](auto x){return x * 1.5;}
-                    | collect_at_most<100>;
-                return res;
-            };
-
 }
 
 namespace testing_namespace
@@ -154,4 +140,16 @@ namespace testing_namespace
     };
 
     static_assert(test_assign_in_vector() == make_compact_vector_with_max_size(30,60,90) ,"");
+
+    auto constexpr
+    test_mapr_with_floating_point()
+    {
+        int a[]{5,6,7};
+        return
+        a
+            |mapr|
+                "{[x] / [{x * 1.5}]}"_cambda()
+            | collect_at_most<100>;
+    }
+    static_assert( test_mapr_with_floating_point() == make_compact_vector_with_max_size(7.5,9.0,10.5) ,"");
 }
