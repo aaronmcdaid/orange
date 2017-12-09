@@ -1425,27 +1425,31 @@ namespace orange {
         Z & m_z_reference;
         int m_offset;
 
+        constexpr
         decltype(auto) operator == (orange_zip_iterator const & other) const { return this->m_offset == other.m_offset; }
+        constexpr
         decltype(auto) operator != (orange_zip_iterator const & other) const { return this->m_offset != other.m_offset; }
+        constexpr
         decltype(auto) operator -  (orange_zip_iterator const & other) const { return this->m_offset -  other.m_offset; }
+        constexpr
         decltype(auto) operator <  (orange_zip_iterator const & other) const { return this->m_offset <  other.m_offset; }
+        constexpr
         decltype(auto) operator =  (orange_zip_iterator const & other)       { this->m_offset =  other.m_offset; return *this; }
+        constexpr
         decltype(auto) operator ++ ()                                        { ++ this->m_offset ;               return *this; }
+        constexpr
         decltype(auto) operator -- ()                                        { -- this->m_offset ;               return *this; }
+        constexpr
         decltype(auto) operator +  (int jump)                          const { return orange_zip_iterator{m_z_reference, m_offset + jump};}
+        constexpr
         decltype(auto) operator -  (int jump)                          const { return orange_zip_iterator{m_z_reference, m_offset - jump};}
+        constexpr
         decltype(auto) operator *  ()                                        { return dereference_helper(std::make_index_sequence<Z::width>{}); }
 
         template<size_t ... Indices>
-        decltype(auto)
+        decltype(auto) constexpr
         dereference_helper         (std::index_sequence<Indices...>)   const
         { return orange_utils::mk_tuple( *(orange::begin(std::get<Indices>(m_z_reference.m_ranges)) + m_offset) ... ); }
-
-        template<size_t ... Indices>
-        auto constexpr
-        dereference_helper_val     (std::index_sequence<Indices...>)   const
-        ->decltype(std::make_tuple       ( *(orange::begin(std::get<Indices>(m_z_reference.m_ranges)) + m_offset) ... ))
-        {   return std::make_tuple       ( *(orange::begin(std::get<Indices>(m_z_reference.m_ranges)) + m_offset) ... ); }
 
         template<size_t ... Indices>
         static auto
