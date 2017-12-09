@@ -856,9 +856,8 @@ namespace orange {
 
     template<size_t max_size>
     struct collect_at_most_tag_t{constexpr collect_at_most_tag_t(){}};
-
     template<size_t max_size>
-    auto collect_at_most = collect_at_most_tag_t<max_size>{};    // no need for 'tagger_t', this directly runs
+    auto constexpr collect_at_most = collect_at_most_tag_t<max_size>{};    // no need for 'tagger_t', this directly runs
 
 
     // the type to capture the value, i.e. for the left-hand '|'
