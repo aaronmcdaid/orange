@@ -108,7 +108,7 @@ int main () {
                 std::array<int, 3> a{{1,2,3}};
                 a
                     |foreach|
-                        "(lambda [x] [(assign x {x * 2})])"_cambda()
+                        "(lambda [x] [(= x {x * 2})])"_cambda()
                         ;
                 return a;
             };
@@ -148,7 +148,7 @@ namespace testing_namespace
         auto d = make_compact_vector_with_max_size(10,20,30);
         d
             |foreach|
-                "(lambda [x] [(assign x {x * 3})])"_cambda()
+                "(lambda [x] [{x = {x * 3}}])"_cambda()
             ;
         return d;
     };
