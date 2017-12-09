@@ -854,6 +854,12 @@ namespace orange {
     struct memoize_tag_t{constexpr memoize_tag_t(){}};
                                         constexpr            memoize_tag_t           memoize;    // no need for 'tagger_t', this directly runs
 
+    template<size_t max_size>
+    struct collect_at_most_tag_t{constexpr collect_at_most_tag_t(){}};
+
+    template<size_t max_size>
+    auto collect_at_most = collect_at_most_tag_t<max_size>{};    // no need for 'tagger_t', this directly runs
+
 
     // the type to capture the value, i.e. for the left-hand '|'
     // of   (x|operation|func)
@@ -1084,6 +1090,33 @@ namespace orange {
         while(!orange::empty(r))
         { orange::pull(r); }
 
+    }
+
+
+    // |collect_at_most|
+    template<typename R
+            , size_t max_size
+            , typename Rnonref = std::remove_reference_t<R>
+            , SFINAE_ENABLE_IF_CHECK( is_range_v<Rnonref> )
+            >
+    auto constexpr
+    operator| (R r, collect_at_most_tag_t<max_size>) {
+        static_assert( is_range_v<R> ,"");
+        using value_type = decltype (   orange::pull( r )  );
+        static_assert(!std::is_reference<value_type>{} ,"");
+
+        vector_with_max_size<value_type, max_size> v;
+        while(!orange::empty(r)) {
+            v.m_data[v.m_current_size] = orange::pull(r);
+            ++ v.m_current_size;
+        }
+        return v;
+        /*
+        std:: vector<value_type> res;
+
+
+        return res;
+        */
     }
 
 

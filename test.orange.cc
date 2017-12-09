@@ -112,5 +112,18 @@ int main () {
                         ;
                 return a;
             };
+
+    TEST_ME ( "collectAtMost"
+            , std::vector<double>{1.5,3,4.5}
+            ) ^ []()
+            {
+                int a[]{1,2,3};
+                auto res =
+                a
+                    |mapr|
+                        [](auto x){return x * 1.5;}
+                    | collect_at_most<100>;
+                return res;
+            };
 }
 
