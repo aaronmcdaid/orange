@@ -920,6 +920,7 @@ namespace orange {
             , size_t N >
     struct vector_with_max_size // somewhat similar to std::vector, but fully constexpr
     {
+        static_assert(!std::is_reference<T>{} ,"");
         T m_data[N];
         size_t m_current_size;
 
