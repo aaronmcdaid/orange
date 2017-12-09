@@ -102,15 +102,15 @@ int main () {
             };
 
     TEST_ME ( "simple use of cambda"
-            , std::vector<int>{2,4,6}
+            , std::array<int, 3>{{2,4,6}}
             ) ^ []()
             {
-                int a[]{1,2,3};
-                return
+                std::array<int, 3> a{{1,2,3}};
                 a
-                    |mapr|
-                        "(lambda [x] [{2 * x}])"_cambda()
-                    |collect;
+                    |foreach|
+                        "(lambda [x] [(assign x {x * 2})])"_cambda()
+                        ;
+                return a;
             };
 }
 
