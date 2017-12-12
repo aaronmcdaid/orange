@@ -118,6 +118,26 @@ struct partition
             }
     }
 };
+struct partitiont
+{
+    template<typename B, typename E>
+    constexpr void
+    operator()(B & b, E & ) const
+    {
+        std::cx_swap(*(b+1), *b);
+        ++b;
+    }
+};
+struct partitionf
+{
+    template<typename B, typename E>
+    constexpr void
+    operator()(B & b, E & e) const
+    {
+        --e;
+        std::cx_swap(*(b+1), *e);
+    }
+};
 
 constexpr bool
 test_partition()
@@ -132,10 +152,12 @@ test_partition()
                 z {3 && 5}
                 (while
                     [{{b != e} && {{b + 1} != e}}]
-                    [(partition.pivot.is.first b e)])
+                    [(if {(* {b + 1}) < (* b)} [(partition.t b e)] [(partition.f b e )])]
+                    )
                 ])
         )--"_cambda
-                [   "partition.pivot.is.first"_binding = partition{}
+                [   "partition.t"_binding = partitiont{}
+                ,   "partition.f"_binding = partitionf{}
                 ,   "b"_binding = b
                 ,   "e"_binding = e
                 ]();
