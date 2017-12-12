@@ -120,7 +120,7 @@ test_partition()
         R"--(
             (let[
                 swap (lambda [x y] [(let[
-                                        tmp x
+                                        tmp (ref2val x)
                                         i1 {x = y}
                                         i2 {y = tmp}
                                         ()
