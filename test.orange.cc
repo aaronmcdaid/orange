@@ -103,7 +103,7 @@ auto test_zip_sorted_in_place()
 struct partition
 {
     template<typename B, typename E>
-    constexpr void
+    constexpr bool
     operator()(B & b, E & e) const
     {
             if( *(b+1) < *b )
@@ -116,35 +116,39 @@ struct partition
                 --e;
                 std::cx_swap(*(b+1), *e);
             }
+            return true;
     }
 };
 struct partitiont
 {
     template<typename B, typename E>
-    constexpr void
+    constexpr bool
     operator()(B & b, E & ) const
     {
         std::cx_swap(*(b+1), *b);
         ++b;
+        return true;
     }
 };
 struct partitionf
 {
     template<typename B, typename E>
-    constexpr void
+    constexpr bool
     operator()(B & b, E & e) const
     {
         --e;
         std::cx_swap(*(b+1), *e);
+        return true;
     }
 };
 struct cx_swapper
 {
     template<typename B, typename E>
-    constexpr void
+    constexpr bool
     operator()(B & b, E & e) const
     {
         std::cx_swap(b, e);
+        return true;
     }
 };
 
@@ -163,15 +167,21 @@ test_partition()
                     [{{b != e} && {{b + 1} != e}}]
                     [(if
                         {(* {b + 1}) < (* b)}
-                        [(partition.t b e)]
-                        [(partition.f b e )]
+                        [(let [
+                            d (cx.swap (* {b + 1}) (* b))
+                            c (++ b)
+                            0
+                            ])]
+                        [(let [
+                            a (-- e)
+                            b (cx.swap (* {b + 1}) (* e))
+                            0
+                            ])]
                         )]
                     )
                 ])
         )--"_cambda
-                [   "partition.t"_binding = partitiont{}
-                ,   "partition.f"_binding = partitionf{}
-                ,   "cx.swap"_binding = cx_swapper{}
+                [   "cx.swap"_binding = cx_swapper{}
                 ,   "b"_binding = b
                 ,   "e"_binding = e
                 ]();
