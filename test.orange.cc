@@ -138,6 +138,15 @@ struct partitionf
         std::cx_swap(*(b+1), *e);
     }
 };
+struct cx_swapper
+{
+    template<typename B, typename E>
+    constexpr void
+    operator()(B & b, E & e) const
+    {
+        std::cx_swap(b, e);
+    }
+};
 
 constexpr bool
 test_partition()
@@ -152,12 +161,17 @@ test_partition()
                 z {3 && 5}
                 (while
                     [{{b != e} && {{b + 1} != e}}]
-                    [(if {(* {b + 1}) < (* b)} [(partition.t b e)] [(partition.f b e )])]
+                    [(if
+                        {(* {b + 1}) < (* b)}
+                        [(partition.t b e)]
+                        [(partition.f b e )]
+                        )]
                     )
                 ])
         )--"_cambda
                 [   "partition.t"_binding = partitiont{}
                 ,   "partition.f"_binding = partitionf{}
+                ,   "cx.swap"_binding = cx_swapper{}
                 ,   "b"_binding = b
                 ,   "e"_binding = e
                 ]();
