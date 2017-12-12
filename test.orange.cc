@@ -103,29 +103,19 @@ auto test_zip_sorted_in_place()
 struct partition
 {
     template<typename B, typename E>
-    constexpr B
-    operator()(B b, E e) const
+    constexpr void
+    operator()(B & b, E & e) const
     {
-        // should never be called on fewer than two items,
-        // TODO: think about testing/asserting this
-        (void)b;
-        (void)e;
-        while((b != e) && ((b+1)!=e))
-        {
             if( *(b+1) < *b )
             {
                 std::cx_swap(*(b+1), *b);
                 ++b;
-                continue;
             }
             else
             {
                 --e;
                 std::cx_swap(*(b+1), *e);
-                continue;
             }
-        }
-        return b;
     }
 };
 
@@ -133,10 +123,21 @@ constexpr bool
 test_partition()
 {
         int a[] = {6,2,5,8,3,9,7};
-        "(partition.pivot.is.first b e)"_cambda
+        auto b = std::begin(a);
+        auto e = std::end  (a);
+        R"--(
+            (let [
+                x {b != e}
+                y {b + 1}
+                z {3 && 5}
+                (while
+                    [{{b != e} && {{b + 1} != e}}]
+                    [(partition.pivot.is.first b e)])
+                ])
+        )--"_cambda
                 [   "partition.pivot.is.first"_binding = partition{}
-                ,   "b"_binding = std::begin(a)
-                ,   "e"_binding = std::end(a)
+                ,   "b"_binding = b
+                ,   "e"_binding = e
                 ]();
         return cambda_utils::equal_array(a, (int[]){2,5,3,6,9,7,8});
 }
