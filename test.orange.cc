@@ -125,6 +125,8 @@ test_partition()
                         {(* {b + 1}) < (* b)}
                         [(begin [
                                 (swap (* {b + 1}) (* b))
+                                (swap (* {b + 1}) (* b))
+                                (swap (* {b + 1}) (* b))
                                 (++ b)
                                 ()
                                 ])]
