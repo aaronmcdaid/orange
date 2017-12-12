@@ -103,10 +103,11 @@ auto test_zip_sorted_in_place()
 struct cx_swapper
 {
     template<typename B, typename E>
-    constexpr void
+    constexpr bool
     operator()(B & b, E & e) const
     {
         std::cx_swap(b, e);
+        return true;
     }
 };
 
@@ -118,7 +119,12 @@ test_partition()
         auto e = std::end  (a);
         R"--(
             (let[
-                swap (lambda [x y] [(cx.swap x y)])
+                swap (lambda [x y] [(let[
+                                        tmp x
+                                        i1 {x = y}
+                                        i2 {y = tmp}
+                                        ()
+                                    ])])
                 (while
                     [{{b != e} && {{b + 1} != e}}]
                     [(if
