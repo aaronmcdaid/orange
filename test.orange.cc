@@ -100,58 +100,6 @@ auto test_zip_sorted_in_place()
     return res;
 }
 
-struct cx_swapper
-{
-    template<typename B, typename E>
-    constexpr bool
-    operator()(B & b, E & e) const
-    {
-        std::cx_swap(b, e);
-        return true;
-    }
-};
-
-constexpr bool
-test_partition()
-{
-        int a[] = {6,2,5,8,3,9,7};
-        auto b = std::begin(a);
-        auto e = std::end  (a);
-        R"--(
-            (let[
-                swap (lambda [x y] [(let[
-                                        tmp (ref2val x)
-                                        i1 {x = y}
-                                        i2 {y = tmp}
-                                        ()
-                                    ])])
-                (while
-                    [{{b != e} && {{b + 1} != e}}]
-                    [(if
-                        {(* {b + 1}) < (* b)}
-                        [(begin [
-                                (swap (* {b + 1}) (* b))
-                                (++ b)
-                                ()
-                                ])]
-                        [(begin [
-                            (-- e)
-                            (swap (* {b + 1}) (* e))
-                            ()
-                            ])]
-                        )]
-                    )
-            ])
-        )--"_cambda
-                [   "cx.swap"_binding = cx_swapper{}
-                ,   "b"_binding = b
-                ,   "e"_binding = e
-                ]();
-        return cambda_utils::equal_array(a, (int[]){2,5,3,6,9,7,8});
-}
-
-static_assert(test_partition() ,"");
-
 int main () {
     static_assert(test_zip_sorted_in_place() == make_compact_vector_with_max_size(0.3,0.5,0.1,0.6,0.2,0.4), "");
 
