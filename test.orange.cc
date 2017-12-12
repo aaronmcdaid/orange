@@ -160,22 +160,20 @@ test_partition()
         auto e = std::end  (a);
         R"--(
             (let [
-                x {b != e}
-                y {b + 1}
-                z {3 && 5}
                 (while
                     [{{b != e} && {{b + 1} != e}}]
                     [(if
                         {(* {b + 1}) < (* b)}
-                        [(let [
-                            d (cx.swap (* {b + 1}) (* b))
-                            c (++ b)
-                            0
-                            ])]
-                        [(let [
-                            a (-- e)
-                            b (cx.swap (* {b + 1}) (* e))
-                            0
+                        [(begin [
+                                (cx.swap (* {b + 1}) (* b))
+                                (++ b)
+                                ''
+                                ])
+                            ]
+                        [(begin [
+                            (-- e)
+                            (cx.swap (* {b + 1}) (* e))
+                            ''
                             ])]
                         )]
                     )
