@@ -100,55 +100,13 @@ auto test_zip_sorted_in_place()
     return res;
 }
 
-struct partition
-{
-    template<typename B, typename E>
-    constexpr bool
-    operator()(B & b, E & e) const
-    {
-            if( *(b+1) < *b )
-            {
-                std::cx_swap(*(b+1), *b);
-                ++b;
-            }
-            else
-            {
-                --e;
-                std::cx_swap(*(b+1), *e);
-            }
-            return true;
-    }
-};
-struct partitiont
-{
-    template<typename B, typename E>
-    constexpr bool
-    operator()(B & b, E & ) const
-    {
-        std::cx_swap(*(b+1), *b);
-        ++b;
-        return true;
-    }
-};
-struct partitionf
-{
-    template<typename B, typename E>
-    constexpr bool
-    operator()(B & b, E & e) const
-    {
-        --e;
-        std::cx_swap(*(b+1), *e);
-        return true;
-    }
-};
 struct cx_swapper
 {
     template<typename B, typename E>
-    constexpr bool
+    constexpr void
     operator()(B & b, E & e) const
     {
         std::cx_swap(b, e);
-        return true;
     }
 };
 
