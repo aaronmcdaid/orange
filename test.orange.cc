@@ -12,6 +12,7 @@ using utils:: operator<<;
 using utils:: type_as_string;
 
 using cambda::operator"" _cambda;
+using cambda::operator"" _binding;
 
 namespace std {
 
@@ -98,6 +99,49 @@ auto test_zip_sorted_in_place()
         |collect_at_most<10>;
     return res;
 }
+
+struct partition
+{
+    template<typename B, typename E>
+    constexpr B
+    operator()(B b, E e) const
+    {
+        // should never be called on fewer than two items,
+        // TODO: think about testing/asserting this
+        (void)b;
+        (void)e;
+        while((b != e) && ((b+1)!=e))
+        {
+            if( *(b+1) < *b )
+            {
+                std::cx_swap(*(b+1), *b);
+                ++b;
+                continue;
+            }
+            else
+            {
+                --e;
+                std::cx_swap(*(b+1), *e);
+                continue;
+            }
+        }
+        return b;
+    }
+};
+
+constexpr bool
+test_partition()
+{
+        int a[] = {6,2,5,8,3,9,7};
+        "(partition.pivot.is.first b e)"_cambda
+                [   "partition.pivot.is.first"_binding = partition{}
+                ,   "b"_binding = std::begin(a)
+                ,   "e"_binding = std::end(a)
+                ]();
+        return cambda_utils::equal_array(a, (int[]){2,5,3,6,9,7,8});
+}
+
+static_assert(test_partition() ,"");
 
 int main () {
     static_assert(test_zip_sorted_in_place() == make_compact_vector_with_max_size(0.3,0.5,0.1,0.6,0.2,0.4), "");
