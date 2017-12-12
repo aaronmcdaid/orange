@@ -117,7 +117,6 @@ test_partition()
         auto b = std::begin(a);
         auto e = std::end  (a);
         R"--(
-            (let [
                 (while
                     [{{b != e} && {{b + 1} != e}}]
                     [(if
@@ -125,17 +124,15 @@ test_partition()
                         [(begin [
                                 (cx.swap (* {b + 1}) (* b))
                                 (++ b)
-                                ''
-                                ])
-                            ]
+                                ()
+                                ])]
                         [(begin [
                             (-- e)
                             (cx.swap (* {b + 1}) (* e))
-                            ''
+                            ()
                             ])]
                         )]
                     )
-                ])
         )--"_cambda
                 [   "cx.swap"_binding = cx_swapper{}
                 ,   "b"_binding = b
