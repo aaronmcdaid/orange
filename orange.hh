@@ -1478,23 +1478,36 @@ namespace std {
         using iterator_category  = std::random_access_iterator_tag;
     };
 
-    template<typename T>
-    void constexpr
-    cx_swap(T &l, T &r)
-    { auto t = l; l=r; r=t; }
-
-    template<size_t ... I, typename ...T>
-    void constexpr
-    cx_swap_helper(std::index_sequence<I...>, std::tuple<T...> l, std::tuple<T...> r) {
-        orange_utils:: ignore( (void(cx_swap( std::get<I>(l) , std:: get<I>(r) )),0) ... );
-    }
     template<typename ...T>
-    auto constexpr
-    cx_swap(std::tuple<T...> l, std::tuple<T...> r)
-    -> std::enable_if_t< orange::all_true(std::is_lvalue_reference<T>{}...) >
+    void constexpr
+    cx_swap(T && ... t);
+
+    namespace detail {
+        template<typename T>
+        void constexpr
+        cx_swap__priority_overload(orange_utils::priority_tag<1>, T &l, T &r)
+        { auto t = l; l=r; r=t; }
+
+        template<size_t ... I, typename ...T>
+        void constexpr
+        cx_swap_helper(std::index_sequence<I...>, std::tuple<T...> l, std::tuple<T...> r) {
+            orange_utils:: ignore( (void(cx_swap( std::get<I>(l) , std:: get<I>(r) )),0) ... );
+        }
+        template<typename ...T>
+        auto constexpr
+        cx_swap__priority_overload(orange_utils::priority_tag<2>, std::tuple<T...> l, std::tuple<T...> r)
+        -> std::enable_if_t< orange::all_true(std::is_lvalue_reference<T>{}...) >
+        {
+            static_assert(orange::all_true(std::is_lvalue_reference<T>{}...) ,"");
+            cx_swap_helper(std::make_index_sequence< std::tuple_size<decltype(r)>{} >{}, l,r);
+        }
+    } // namespace detail
+
+    template<typename ...T>
+    void constexpr
+    cx_swap(T && ... t)
     {
-        static_assert(orange::all_true(std::is_lvalue_reference<T>{}...) ,"");
-        cx_swap_helper(std::make_index_sequence< std::tuple_size<decltype(r)>{} >{}, l,r);
+        return detail:: cx_swap__priority_overload(orange_utils::priority_tag<9>{}, std::forward<T>(t)...);
     }
 }
 namespace orange {
