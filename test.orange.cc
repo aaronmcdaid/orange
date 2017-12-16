@@ -95,7 +95,7 @@ auto test_zip_sorted_in_place()
     auto res =
     ar
         |mapr|
-            apply_pack % "{[_ _ d] / [(ref2val d)]}"_cambda() // 'ref2val' to to return double, not double&
+            apply_pack % "{[_ _ d] lambda [(ref2val d)]}"_cambda() // 'ref2val' to to return double, not double&
         |collect_at_most<10>;
     return res;
 }
@@ -170,7 +170,7 @@ namespace testing_namespace
         return
         a
             |mapr|
-                "{[x] / [{x * 1.5}]}"_cambda()
+                "{[x] lambda [{x * 1.5}]}"_cambda()
             | collect_at_most<100>;
     }
     static_assert( test_mapr_with_floating_point() == make_compact_vector_with_max_size(7.5,9.0,10.5) ,"");
