@@ -95,7 +95,7 @@ auto test_zip_sorted_in_place()
     auto res =
     ar
         |mapr|
-            apply_pack % "{[_ _ d] / [d]}"_cambda()
+            apply_pack % "{[_ _ d] / [(ref2val d)]}"_cambda() // 'ref2val' to to return double, not double&
         |collect_at_most<10>;
     return res;
 }
