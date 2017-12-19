@@ -156,7 +156,7 @@ namespace testing_namespace
         auto d = make_compact_vector_with_max_size(10,20,30);
         d
             |foreach|
-                "(lambda [x] [{x = {x * 3}}])"_cambda()
+                "(lambda [(& x)] [{x = {x * 3}}])"_cambda()
             ;
         return d;
     };
