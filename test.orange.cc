@@ -1,4 +1,7 @@
 #include "orange.hh"
+
+#include "CONSTEXPR_LAMBDA/CONSTEXPR_LAMBDA.hh"
+
 #include "cambda/cambda.hh"
 #include "../module-bits.and.pieces/PP.hh"
 #include "../module-bits.and.pieces/utils.hh"
@@ -95,7 +98,7 @@ auto test_zip_sorted_in_place()
     auto res =
     ar
         |mapr|
-            apply_pack % "{[_ _ d] lambda [(ref2val d)]}"_cambda() // 'ref2val' to to return double, not double&
+            apply_pack % CONSTEXPR_LAMBDA(,i,,c,,d)((void)i;(void)c;return d;)
         |collect_at_most<10>;
     return res;
 }
@@ -170,7 +173,7 @@ namespace testing_namespace
         return
         a
             |mapr|
-                "{[x] lambda [{x * 1.5}]}"_cambda()
+                CONSTEXPR_LAMBDA(,x)( return x*1.5; )
             | collect_at_most<100>;
     }
     static_assert( test_mapr_with_floating_point() == make_compact_vector_with_max_size(7.5,9.0,10.5) ,"");
