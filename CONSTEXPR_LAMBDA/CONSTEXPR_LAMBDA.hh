@@ -93,7 +93,7 @@ namespace CONSTEXPR_LAMBDA_namespace
                         (                           auto && arg0                \
                         )   {                                                               \
             CONSTEXPR_LAMBDA_start_the_nested_class                                         \
-            operator()  (   decltype(arg0)  NAME_AND_REF_0                \
+            operator()  (   std::remove_reference_t<decltype(arg0)>  NAME_AND_REF_0                \
                         )                                                                   \
             ->decltype(auto)                                                                \
             {   CONSTEXPR_LAMBDA_BODY_OF_THE_FUNCTION
@@ -105,6 +105,18 @@ namespace CONSTEXPR_LAMBDA_namespace
             CONSTEXPR_LAMBDA_start_the_nested_class                                         \
             operator()  (   std::remove_reference_t<decltype(arg0)>  NAME_AND_REF_0                \
                         ,   std::remove_reference_t<decltype(arg1)>  NAME_AND_REF_1                \
+                        )                                                                   \
+            ->decltype(auto)                                                                \
+            {   CONSTEXPR_LAMBDA_BODY_OF_THE_FUNCTION
+
+#define CONSTEXPR_LAMBDA_with_this_many_args_3(NAME_AND_REF_0, NAME_AND_REF_1, NAME_AND_REF_2)                   \
+            CONSTEXPR_LAMBDA_start_of_the_macro_stuff                                       \
+                        (   auto && arg0, auto && arg1, auto && arg2                        \
+                        )   {                                                               \
+            CONSTEXPR_LAMBDA_start_the_nested_class                                         \
+            operator()  (   std::remove_reference_t<decltype(arg0)>  NAME_AND_REF_0                \
+                        ,   std::remove_reference_t<decltype(arg1)>  NAME_AND_REF_1                \
+                        ,   std::remove_reference_t<decltype(arg2)>  NAME_AND_REF_2                \
                         )                                                                   \
             ->decltype(auto)                                                                \
             {   CONSTEXPR_LAMBDA_BODY_OF_THE_FUNCTION

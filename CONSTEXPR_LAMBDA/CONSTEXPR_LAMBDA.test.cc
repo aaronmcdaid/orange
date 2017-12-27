@@ -40,26 +40,22 @@ int main()
         constexpr auto res3 = CONSTEXPR_LAMBDA_with_this_many_args_1(m)( return m*m;)(3);
         static_assert(res3 == 9 ,"");
 
-        //constexpr auto res4 = CONSTEXPR_LAMBDA_with_this_many_args_4(,a,,b)( return a*b;)(21,3) ;
-        //static_assert(res4 == 63 ,"");
+        constexpr auto res4 = CONSTEXPR_LAMBDA_with_this_many_args_2(a,b)( return a*b;)(21,3) ;
+        static_assert(res4 == 63 ,"");
 
         constexpr auto res5 = CONSTEXPR_LAMBDA_with_this_many_args_1(m)( return m*m;) (3);
         static_assert(res5 == 9 ,"");
     }
     {
-        //constexpr auto res3 = CONSTEXPR_LAMBDA(()m)( return m*m;)(3);
-        //static_assert(res3 == 9 ,"");
+        constexpr auto res3 = CONSTEXPR_LAMBDA(m)( return m*m;)(3);
+        static_assert(res3 == 9 ,"");
 
-        //constexpr auto res4 = CONSTEXPR_LAMBDA(,a,,b)( return a*b;)(21,3) ;
-        //static_assert(res4 == 63 ,"");
-
-        //constexpr auto res5 = CONSTEXPR_LAMBDA(,m)( return m*m;) (3);
-        //static_assert(res5 == 9 ,"");
+        constexpr auto res4 = CONSTEXPR_LAMBDA(a,b)( return a*b;)(21,3) ;
+        static_assert(res4 == 63 ,"");
 
         //constexpr auto res0 = CONSTEXPR_LAMBDA()( return 42;) ();
         //static_assert(res0 == 42 ,"");
     }
-#if 0
     auto funny_lambda_returning_our_pseudo_lambda =
     [](auto outer_x){
 
@@ -105,10 +101,9 @@ int main()
 #endif
 
     {
-        constexpr auto square = CONSTEXPR_LAMBDA(,a)( return a*a;) ;
+        constexpr auto square = CONSTEXPR_LAMBDA(a)( return a*a;) ;
         static_assert(square(4) == 16 ,"");
     }
-#endif
 }
 
 constexpr auto
@@ -146,14 +141,13 @@ test_simple_reference_capture2()
 }
 static_assert(test_simple_reference_capture2() == 10 , "");
 
-#if 0
 constexpr auto
 test_reference_capture()
 {
     int A = 10;
     int B = 100;
     int C = 1000;
-    int product = CONSTEXPR_LAMBDA(&,a,,b,,c)
+    int product = CONSTEXPR_LAMBDA(&a,b,c)
                     (
                         int product = a*b*c;
                         a=2; // 'a' was captured by reference
@@ -167,4 +161,3 @@ test_reference_capture()
     return A + B + C + product;
 }
 static_assert(test_reference_capture() == 2 + 100 + 1000 + 1000000 ,"");
-#endif
