@@ -79,14 +79,15 @@ namespace CONSTEXPR_LAMBDA_namespace
 #define CONSTEXPR_LAMBDA_select_based_on_arg_count(n)       CONSTEXPR_LAMBDA_select_based_on_arg_count_impl(n)
 #define CONSTEXPR_LAMBDA_select_based_on_arg_count_impl(n)  CONSTEXPR_LAMBDA_with_this_many_args_ ## n
 
-
-
-
 // Next are the main macros, one for each number of possible arguments:
 
-#define JUST_THE_NAME(ref_qualifier) /*nothing*/
-#define JUST_AUTO(ref_qualifier) auto
-#define AUTO_WITH_REF(ref_qualifier) auto ref_qualifier
+#define CONSTEXPR_LAMBDA0()                   \
+            CONSTEXPR_LAMBDA_start_of_the_macro_stuff                                       \
+                        ()   {                                                               \
+            CONSTEXPR_LAMBDA_start_the_nested_class                                         \
+            operator()  ()                                                                   \
+            ->decltype(auto)                                                                \
+            {   CONSTEXPR_LAMBDA_BODY_OF_THE_FUNCTION
 
 #define CONSTEXPR_LAMBDA_with_this_many_args_1(NAME_AND_REF_0)                   \
             CONSTEXPR_LAMBDA_start_of_the_macro_stuff                                       \
