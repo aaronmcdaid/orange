@@ -83,62 +83,17 @@ namespace CONSTEXPR_LAMBDA_namespace
 
 
 // Next are the main macros, one for each number of possible arguments:
-#define CONSTEXPR_LAMBDA_with_this_many_args_1(no_argument_here)                            \
-            CONSTEXPR_LAMBDA_start_of_the_macro_stuff                                       \
-                        ()   {                                                              \
-            CONSTEXPR_LAMBDA_start_the_nested_class                                         \
-            operator()  ()                                                                  \
-            ->decltype(auto)                                                                \
-            {   CONSTEXPR_LAMBDA_BODY_OF_THE_FUNCTION
 
-#define CONSTEXPR_LAMBDA_with_this_many_args_2(REF_OF_ARG0, NAME_OF_ARG0)                   \
+#define JUST_THE_NAME(ref_qualifier) /*nothing*/
+#define JUST_AUTO(ref_qualifier) auto
+#define AUTO_WITH_REF(ref_qualifier) auto ref_qualifier
+
+#define CONSTEXPR_LAMBDA_with_this_many_args_1(NAME_AND_REF_0)                   \
             CONSTEXPR_LAMBDA_start_of_the_macro_stuff                                       \
-                        (   auto                    REF_OF_ARG0 NAME_OF_ARG0                \
+                        (                           AUTO_WITH_REF NAME_AND_REF_0                \
                         )   {                                                               \
             CONSTEXPR_LAMBDA_start_the_nested_class                                         \
-            operator()  (   decltype(NAME_OF_ARG0)  REF_OF_ARG0 NAME_OF_ARG0                \
-                        )                                                                   \
-            ->decltype(auto)                                                                \
-            {   CONSTEXPR_LAMBDA_BODY_OF_THE_FUNCTION
-
-#define CONSTEXPR_LAMBDA_with_this_many_args_4(REF_OF_ARG0, NAME_OF_ARG0, REF_OF_ARG1, NAME_OF_ARG1)  \
-            CONSTEXPR_LAMBDA_start_of_the_macro_stuff                                       \
-                    (   auto                            REF_OF_ARG0 NAME_OF_ARG0            \
-                    ,   auto                            REF_OF_ARG1 NAME_OF_ARG1            \
-                    ) {     \
-            CONSTEXPR_LAMBDA_start_the_nested_class                                         \
-            operator()  (   decltype(NAME_OF_ARG0)      REF_OF_ARG0 NAME_OF_ARG0            \
-                        ,   decltype(NAME_OF_ARG1)      REF_OF_ARG1 NAME_OF_ARG1            \
-                        )                                                                   \
-            ->decltype(auto)                                                                \
-            {   CONSTEXPR_LAMBDA_BODY_OF_THE_FUNCTION
-
-#define CONSTEXPR_LAMBDA_with_this_many_args_6(REF_OF_ARG0, NAME_OF_ARG0, REF_OF_ARG1, NAME_OF_ARG1, REF_OF_ARG2, NAME_OF_ARG2)  \
-            CONSTEXPR_LAMBDA_start_of_the_macro_stuff                                       \
-                    (   auto                            REF_OF_ARG0 NAME_OF_ARG0            \
-                    ,   auto                            REF_OF_ARG1 NAME_OF_ARG1            \
-                    ,   auto                            REF_OF_ARG2 NAME_OF_ARG2            \
-                    ) {     \
-            CONSTEXPR_LAMBDA_start_the_nested_class                                         \
-            operator()  (   decltype(NAME_OF_ARG0)      REF_OF_ARG0 NAME_OF_ARG0            \
-                        ,   decltype(NAME_OF_ARG1)      REF_OF_ARG1 NAME_OF_ARG1            \
-                        ,   decltype(NAME_OF_ARG2)      REF_OF_ARG2 NAME_OF_ARG2            \
-                        )                                                                   \
-            ->decltype(auto)                                                                \
-            {   CONSTEXPR_LAMBDA_BODY_OF_THE_FUNCTION
-
-#define CONSTEXPR_LAMBDA_with_this_many_args_8(REF_OF_ARG0, NAME_OF_ARG0, REF_OF_ARG1, NAME_OF_ARG1, REF_OF_ARG2, NAME_OF_ARG2, REF_OF_ARG3, NAME_OF_ARG3)  \
-            CONSTEXPR_LAMBDA_start_of_the_macro_stuff                                       \
-                    (   auto                            REF_OF_ARG0 NAME_OF_ARG0            \
-                    ,   auto                            REF_OF_ARG1 NAME_OF_ARG1            \
-                    ,   auto                            REF_OF_ARG2 NAME_OF_ARG2            \
-                    ,   auto                            REF_OF_ARG3 NAME_OF_ARG3            \
-                    ) {     \
-            CONSTEXPR_LAMBDA_start_the_nested_class                                         \
-            operator()  (   decltype(NAME_OF_ARG0)      REF_OF_ARG0 NAME_OF_ARG0            \
-                        ,   decltype(NAME_OF_ARG1)      REF_OF_ARG1 NAME_OF_ARG1            \
-                        ,   decltype(NAME_OF_ARG2)      REF_OF_ARG2 NAME_OF_ARG2            \
-                        ,   decltype(NAME_OF_ARG3)      REF_OF_ARG3 NAME_OF_ARG3            \
+            operator()  (   decltype(JUST_THE_NAME NAME_AND_REF_0)  JUST_THE_NAME NAME_AND_REF_0                \
                         )                                                                   \
             ->decltype(auto)                                                                \
             {   CONSTEXPR_LAMBDA_BODY_OF_THE_FUNCTION
