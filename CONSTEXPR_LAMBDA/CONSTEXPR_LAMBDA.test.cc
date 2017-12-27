@@ -37,13 +37,13 @@ int main()
     */
 
     {
-        constexpr auto res3 = CONSTEXPR_LAMBDA_with_this_many_args_1(()m)( return m*m;)(3);
+        constexpr auto res3 = CONSTEXPR_LAMBDA_with_this_many_args_1(m)( return m*m;)(3);
         static_assert(res3 == 9 ,"");
 
         //constexpr auto res4 = CONSTEXPR_LAMBDA_with_this_many_args_4(,a,,b)( return a*b;)(21,3) ;
         //static_assert(res4 == 63 ,"");
 
-        constexpr auto res5 = CONSTEXPR_LAMBDA_with_this_many_args_1(()m)( return m*m;) (3);
+        constexpr auto res5 = CONSTEXPR_LAMBDA_with_this_many_args_1(m)( return m*m;) (3);
         static_assert(res5 == 9 ,"");
     }
     {
@@ -110,6 +110,41 @@ int main()
     }
 #endif
 }
+
+constexpr auto
+test_simple_reference_capture1()
+{
+    int A = 1;
+    int B = 10;
+    int res = CONSTEXPR_LAMBDA_with_this_many_args_2(&a,b)
+                    (
+                        a=2; // 'a' was captured by reference
+                        (void)a;
+                        return b;
+                    )
+                    (A,B);
+    // 'product' should be 1000000 now
+    // 'A' was captured by reference, and hence is now 2
+    return A * res;
+}
+static_assert(test_simple_reference_capture1() == 20 , "");
+constexpr auto
+test_simple_reference_capture2()
+{
+    int A = 1;
+    int B = 10;
+    int res = CONSTEXPR_LAMBDA_with_this_many_args_2(a,b)
+                    (
+                        a=2; // 'a' was captured by value, hence this has no effect
+                        (void)a;
+                        return b;
+                    )
+                    (A,B);
+    // 'product' should be 1000000 now
+    // 'A' was captured by reference, and hence is now 2
+    return A * res;
+}
+static_assert(test_simple_reference_capture2() == 10 , "");
 
 #if 0
 constexpr auto
