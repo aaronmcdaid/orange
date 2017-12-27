@@ -2,7 +2,6 @@
 
 #include "CONSTEXPR_LAMBDA/CONSTEXPR_LAMBDA.hh"
 
-#include "cambda/cambda.hh"
 #include "../module-bits.and.pieces/PP.hh"
 #include "../module-bits.and.pieces/utils.hh"
 #include<iostream>
@@ -13,9 +12,6 @@ using std:: string;
 using namespace orange;
 using utils:: operator<<;
 using utils:: type_as_string;
-
-using cambda::operator"" _cambda;
-using cambda::operator"" _binding;
 
 namespace std {
 
@@ -148,7 +144,7 @@ namespace testing_namespace
         return
             arr
                 |mapr|
-                    "(lambda [x] [{x * 10}])"_cambda()
+                    CONSTEXPR_LAMBDA(x)(return x*10;)
                 |collect_at_most<100>;
     };
     static_assert(test_simple_map() == make_compact_vector_with_max_size(10,20,30) ,"");
@@ -159,7 +155,7 @@ namespace testing_namespace
         auto d = make_compact_vector_with_max_size(10,20,30);
         d
             |foreach|
-                "(lambda [(& x)] [{x = {x * 3}}])"_cambda()
+                CONSTEXPR_LAMBDA(&x)(x=x*3;)
             ;
         return d;
     };
