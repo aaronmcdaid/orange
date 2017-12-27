@@ -69,13 +69,13 @@ namespace CONSTEXPR_LAMBDA_namespace
  * macro and forward accordingly. i.e.
  *  CONSTEXPR_LAMBDA(&,a)       => CONSTEXPR_LAMBDA_with_this_many_args_2(&,a)
  *  CONSTEXPR_LAMBDA(&,a,&&,b)  => CONSTEXPR_LAMBDA_with_this_many_args_4(&,a,&&,b)
- * I don't quite know why MACRO_EXPAND is needed, but it is needed on MSVC.
+ * I don't quite know why CONSTEXPR_LAMBDA_MACRO_EXPAND is needed, but it is needed on MSVC.
  */
-#define CONSTEXPR_LAMBDA(...)   MACRO_EXPAND(CONSTEXPR_LAMBDA_select_based_on_arg_count(COUNT_MACRO_ARGS(__VA_ARGS__))(__VA_ARGS__))
-#define COUNT_MACRO_ARGS(...)       COUNT_MACRO_ARGS_A(unused_sdkjflkajfdl, __VA_ARGS__)
-#define COUNT_MACRO_ARGS_A(...)     MACRO_EXPAND(COUNT_MACRO_ARGS_B(__VA_ARGS__, 12,11,10,9,8,7,6,5,4,3,2,1,0))
-#define MACRO_EXPAND(x)             x
-#define COUNT_MACRO_ARGS_B(_0,_1,_2,_3,_4,_5,_6,_7,_8,_9,_10,_11,_12, VAL, ...)     VAL
+#define CONSTEXPR_LAMBDA(...)   CONSTEXPR_LAMBDA_MACRO_EXPAND(CONSTEXPR_LAMBDA_select_based_on_arg_count(CONSTEXPR_LAMBDA_COUNT_MACRO_ARGS(__VA_ARGS__))(__VA_ARGS__))
+#define CONSTEXPR_LAMBDA_COUNT_MACRO_ARGS(...)       CONSTEXPR_LAMBDA_COUNT_MACRO_ARGS_A(unused_sdkjflkajfdl, __VA_ARGS__)
+#define CONSTEXPR_LAMBDA_COUNT_MACRO_ARGS_A(...)     CONSTEXPR_LAMBDA_MACRO_EXPAND(CONSTEXPR_LAMBDA_COUNT_MACRO_ARGS_B(__VA_ARGS__, 12,11,10,9,8,7,6,5,4,3,2,1,0))
+#define CONSTEXPR_LAMBDA_MACRO_EXPAND(x)             x
+#define CONSTEXPR_LAMBDA_COUNT_MACRO_ARGS_B(_0,_1,_2,_3,_4,_5,_6,_7,_8,_9,_10,_11,_12, VAL, ...)     VAL
 #define CONSTEXPR_LAMBDA_select_based_on_arg_count(n)       CONSTEXPR_LAMBDA_select_based_on_arg_count_impl(n)
 #define CONSTEXPR_LAMBDA_select_based_on_arg_count_impl(n)  CONSTEXPR_LAMBDA_with_this_many_args_ ## n
 
