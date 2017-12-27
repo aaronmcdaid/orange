@@ -98,7 +98,7 @@ auto test_zip_sorted_in_place()
     auto res =
     ar
         |mapr|
-            apply_pack % CONSTEXPR_LAMBDA(,i,,c,,d)((void)i;(void)c;return d;)
+            apply_pack % CONSTEXPR_LAMBDA(i,c,d)((void)i;(void)c;return d;)
         |collect_at_most<10>;
     return res;
 }
@@ -173,7 +173,7 @@ namespace testing_namespace
         return
         a
             |mapr|
-                CONSTEXPR_LAMBDA(,x)( return x*1.5; )
+                CONSTEXPR_LAMBDA(x)( return x*1.5; )
             | collect_at_most<100>;
     }
     static_assert( test_mapr_with_floating_point() == make_compact_vector_with_max_size(7.5,9.0,10.5) ,"");
