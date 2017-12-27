@@ -16,6 +16,7 @@ namespace CONSTEXPR_LAMBDA_namespace
     template<typename L>
     struct call_forwarder
     {
+
         template<typename ... T>
         constexpr auto
         operator() (T && ... t) const
@@ -36,6 +37,27 @@ namespace CONSTEXPR_LAMBDA_namespace
             return X{} (std::forward<T>(t)...);
         }
 
+        // Next, a special case to catch if it's intended as a zero-arg lambda.
+        // Instead, we'll just pass one unnamed argument.
+        constexpr auto
+        operator() () const
+        ->decltype(auto)
+        {
+            using X = std::decay_t<decltype( *std::declval<L&>()(nullptr) )>;
+            // X is the nested 'CONSTEXPR_LAMBDA_arbitrary_hidden_struct_namelkdsjflkafdlksafdja' type
+            return X{} (nullptr);
+        }
+
+
+        // ... a 'const-volatile' version of the zero-arg special case
+        constexpr auto
+        operator() () const volatile
+        ->decltype(auto)
+        {
+            using X = std::decay_t<decltype( *std::declval<L&>()(nullptr) )>;
+            // X is the nested 'CONSTEXPR_LAMBDA_arbitrary_hidden_struct_namelkdsjflkafdlksafdja' type
+            return X{} (nullptr);
+        }
     };
 
     /* 'make_CONSTEXPR_LAMBDA' constructs a 'call_forwarder' of the appropriate type */
@@ -138,4 +160,3 @@ namespace CONSTEXPR_LAMBDA_namespace
         };                                                                                  \
         return (CONSTEXPR_LAMBDA_arbitrary_hidden_struct_namelkdsjflkafdlksafdja*) nullptr; \
     })) /* { closes the lambda, then one parenthesis for 'null_address_of', then one parenthesis for 'make_CONSTEXPR_LAMBDA' */
-

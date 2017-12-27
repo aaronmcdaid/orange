@@ -53,7 +53,7 @@ int main()
         constexpr auto res4 = CONSTEXPR_LAMBDA(a,b)( return a*b;)(21,3) ;
         static_assert(res4 == 63 ,"");
 
-        constexpr auto res0 = CONSTEXPR_LAMBDA0()( return 42;) (); // NOTE: special name when using exactly zero args
+        constexpr auto res0 = CONSTEXPR_LAMBDA()( return 42;) (); // NOTE: special name when using exactly zero args
         static_assert(res0 == 42 ,"");
     }
     auto funny_lambda_returning_our_pseudo_lambda =
