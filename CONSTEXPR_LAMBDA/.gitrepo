@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:aaronmcdaid/CONSTEXPR_LAMBDA.git
+	branch = master
+	commit = 89017bdb9aa70d466119e6e5df7d4c5b75d2d59e
+	parent = 9847251115ac2d3a3d37d55d79d17b98dd03b671
+	cmdver = 0.3.1
