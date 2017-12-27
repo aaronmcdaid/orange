@@ -38,14 +38,14 @@ namespace CONSTEXPR_LAMBDA_namespace
         }
 
         // Next, a special case to catch if it's intended as a zero-arg lambda.
-        // Instead, we'll just pass one unnamed argument.
+        // Instead, we'll just pass one unnamed argument (of type int).
         constexpr auto
         operator() () const
         ->decltype(auto)
         {
-            using X = std::decay_t<decltype( *std::declval<L&>()(nullptr) )>;
+            using X = std::decay_t<decltype( *std::declval<L&>()(0) )>;
             // X is the nested 'CONSTEXPR_LAMBDA_arbitrary_hidden_struct_namelkdsjflkafdlksafdja' type
-            return X{} (nullptr);
+            return X{} (0);
         }
 
 
@@ -54,9 +54,9 @@ namespace CONSTEXPR_LAMBDA_namespace
         operator() () const volatile
         ->decltype(auto)
         {
-            using X = std::decay_t<decltype( *std::declval<L&>()(nullptr) )>;
+            using X = std::decay_t<decltype( *std::declval<L&>()(0) )>;
             // X is the nested 'CONSTEXPR_LAMBDA_arbitrary_hidden_struct_namelkdsjflkafdlksafdja' type
-            return X{} (nullptr);
+            return X{} (0);
         }
     };
 
