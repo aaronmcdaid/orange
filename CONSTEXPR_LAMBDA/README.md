@@ -5,6 +5,8 @@ Simple macro to allow 'constexpr' generic no-capture lambdas in C++14
 
 In C++14, lambdas are very useful but they have some restrictions. They can't be used in certain contexts and they aren't very friendly with `constexpr`.
 
+*{ Update: Breaking change pushed on 28th December 2017 - fewer commas required now, simpler interface }*
+
 For example, the following code works in C++17, but not C++14 (`error: call to non-constexpr function 'main()::<lambda(int)>'`):
 
 ```
