@@ -99,6 +99,50 @@ auto test_zip_sorted_in_place()
     return res;
 }
 
+void README_tests()
+{
+    {
+        // 'mapr' - apply a function to each element
+        vector<int> arr{1,2,3};
+        auto res =
+            arr
+                |mapr|
+                    [](auto x) {return x*10;}
+                |collect; // collect all the results into a vector
+        assert(res == std::vector<int>({10,20,30}));
+    };
+
+    {
+        // 'filter' - keep only the even ones
+        vector<int> arr{1,2,3,4,5,6};
+        auto res =
+            arr
+                |filter|
+                    [](auto x){return x % 2 == 0;}
+                |collect;
+        assert(res == std::vector<int>({2,4,6}));
+    };
+
+    {
+        vector<int> arr{10,20,30};
+        arr
+            |foreach|
+                [](auto&x){x=x*3;}
+            ;
+        assert(arr == std::vector<int>({30,60,90}));
+    };
+
+    {
+        int a[]{5,6,7};
+        auto res =
+            a
+                |mapr|
+                    [](auto x){ return x*1.5; }
+                |collect;
+        assert( res == std::vector<double>({7.5,9.0,10.5}));
+    }
+}
+
 int main () {
     static_assert(test_zip_sorted_in_place() == make_compact_vector_with_max_size(0.3,0.5,0.1,0.6,0.2,0.4), "");
 
@@ -133,6 +177,7 @@ int main () {
             };
         PP(ar|collect);
     }
+    README_tests();
 }
 
 namespace testing_namespace
@@ -148,6 +193,18 @@ namespace testing_namespace
                 |collect_at_most<100>;
     };
     static_assert(test_simple_map() == make_compact_vector_with_max_size(10,20,30) ,"");
+
+    constexpr auto
+    test_simple_filter()
+    {
+        int arr[]{1,2,3,4,5,6};
+        return
+            arr
+                |filter|
+                    CONSTEXPR_LAMBDA(x)(return x % 2 == 0;)
+                |collect_at_most<100>;
+    };
+    static_assert(test_simple_filter() == make_compact_vector_with_max_size(2,4,6) ,"");
 
     auto constexpr
     test_assign_in_vector()
