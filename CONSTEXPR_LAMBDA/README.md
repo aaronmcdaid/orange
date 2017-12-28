@@ -17,7 +17,7 @@ For example, the following code works in C++17, but not C++14 (`error: call to n
 With this library, you can write this in C++14:
 ```
     constexpr auto a =
-            CONSTEXPR_LAMBDA(,x)( return x*x; ) // a macro created a constexpr pseudo-lambda
+            CONSTEXPR_LAMBDA(x)( return x*x; ) // a macro created a constexpr pseudo-lambda
             (4);                                // call this pseudo-lambda
     static_assert(a == 16 ,"");
 ```
@@ -26,8 +26,8 @@ Within the first set of parentheses, you specify a 'capture type' (by &-referenc
 This essentially creates a generic lambda, i.e. as if all parameters are `auto` or `auto &` or `auto &&`.
 For example:
 ```
-CONSTEXPR_LAMBDA(&&,a,&&,b)  ....// capture two args called 'a' and 'b', both of them by forwarding reference
-CONSTEXPR_LAMBDA( &,x,  ,y)  ....// capture two args called 'x' and 'y', 'x' is by reference, 'y' by value
+CONSTEXPR_LAMBDA(&&a,&&b)  ....// capture two args called 'a' and 'b', both of them by forwarding reference
+CONSTEXPR_LAMBDA( &x,  y)  ....// capture two args called 'x' and 'y', 'x' is by reference, 'y' by value
 
 // the above are essentially equivalent to:
 
@@ -35,8 +35,7 @@ CONSTEXPR_LAMBDA( &,x,  ,y)  ....// capture two args called 'x' and 'y', 'x' is 
     (auto  & x , auto    y)
 ```
 
-You can even use the last parameter to capture a pack, `CONSTEXPR_LAMBDA(...,pack)`, but I can't get it to work on MSVC (tested on gcc.godbolt.org).
-You can also use `&...` and `&&...` to capture a pack of references or a pack of forwarding references.
+You can even use the last parameter to capture a pack, with `CONSTEXPR_LAMBDApack` instead of `CONSTEXPR_LAMBDA`, i.e. `CONSTEXPR_LAMBDApack(first_arg, second_arg, pack)`, but I can't get it to work on MSVC (tested on gcc.godbolt.org).
 
 Here is a more complicated demo showing the reference capture:
 ```
@@ -46,7 +45,7 @@ test_reference_capture()
     int A = 10;
     int B = 100;
     int C = 1000;
-    int product = CONSTEXPR_LAMBDA(  &,a  ,  ,b  ,  ,c)
+    int product = CONSTEXPR_LAMBDA(&a,b,c)
                     (
                         int product = a*b*c;
                         a=2; // 'a' was captured by reference
@@ -64,7 +63,7 @@ static_assert(test_reference_capture() == 2 + 100 + 1000 + 1000000 ,"");
 
 ## Compatibility
 
-Through testing on gcc.godbolt.org, this works on gcc >= 5.1 and clang >= 3.5. Just remember to use `-std=c++14.
+Through testing on gcc.godbolt.org, this works on gcc >= 5.1 and clang >= 3.6. Just remember to use `-std=c++14.
 It also works with the version of `MSVC' currently on gcc.godbolt.org, "MSVC 19 2017 RTW".
 However, I can't get packs to work with MSVC.
 I think this is standard C++14, and if not I think we can fix it if necessary. So don't hesitate to send me any
