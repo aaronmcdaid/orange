@@ -37,13 +37,13 @@ int main()
     */
 
     {
-        constexpr auto res3 = CONSTEXPR_LAMBDA_with_this_many_args_1(m)( return m*m;)(3);
+        constexpr auto res3 = CONSTEXPR_LAMBDA_with_this_many_args_1(,m)( return m*m;)(3);
         static_assert(res3 == 9 ,"");
 
-        constexpr auto res4 = CONSTEXPR_LAMBDA_with_this_many_args_2(a,b)( return a*b;)(21,3) ;
+        constexpr auto res4 = CONSTEXPR_LAMBDA_with_this_many_args_2(,a,b)( return a*b;)(21,3) ;
         static_assert(res4 == 63 ,"");
 
-        constexpr auto res5 = CONSTEXPR_LAMBDA_with_this_many_args_1(m)( return m*m;) (3);
+        constexpr auto res5 = CONSTEXPR_LAMBDA_with_this_many_args_1(,m)( return m*m;) (3);
         static_assert(res5 == 9 ,"");
     }
     {
@@ -89,14 +89,20 @@ int main()
     }));
     static_assert(pseudo_lambda(4) == 16 ,"");
 
-#if 0
+#ifdef __GNUC__
     { // test using packs - they don't work on MSVC
-        constexpr auto i = CONSTEXPR_LAMBDA(...,pack)
+        constexpr auto i = CONSTEXPR_LAMBDApack(pack)
                             (
+                                (void) std::initializer_list<int>{((void)pack,0)...}; // just to avoid an 'unused pack#0' warning on gcc
                                 return sizeof...(pack);
                             ) (42,"hi");
         static_assert(i == 2 ,"");
-
+        constexpr auto j = CONSTEXPR_LAMBDApack(a, pack)
+                            (
+                                (void) std::initializer_list<int>{((void)pack,0)...}; // just to avoid an 'unused pack#0' warning on gcc
+                                return a * sizeof...(pack);
+                            ) (100, 42,"hi", "");
+        static_assert(j == 300 ,"");
     }
 #endif
 
@@ -111,7 +117,7 @@ test_simple_reference_capture1()
 {
     int A = 1;
     int B = 10;
-    int res = CONSTEXPR_LAMBDA_with_this_many_args_2(&a,b)
+    int res = CONSTEXPR_LAMBDA_with_this_many_args_2(,&a,b)
                     (
                         a=2; // 'a' was captured by reference
                         (void)a;
@@ -128,7 +134,7 @@ test_simple_reference_capture2()
 {
     int A = 1;
     int B = 10;
-    int res = CONSTEXPR_LAMBDA_with_this_many_args_2(a,b)
+    int res = CONSTEXPR_LAMBDA_with_this_many_args_2(,a,b)
                     (
                         a=2; // 'a' was captured by value, hence this has no effect
                         (void)a;

@@ -93,7 +93,8 @@ namespace CONSTEXPR_LAMBDA_namespace
  *  CONSTEXPR_LAMBDA(&,a,&&,b)  => CONSTEXPR_LAMBDA_with_this_many_args_4(&,a,&&,b)
  * I don't quite know why CONSTEXPR_LAMBDA_MACRO_EXPAND is needed, but it is needed on MSVC.
  */
-#define CONSTEXPR_LAMBDA(...)   CONSTEXPR_LAMBDA_MACRO_EXPAND(CONSTEXPR_LAMBDA_select_based_on_arg_count(CONSTEXPR_LAMBDA_COUNT_MACRO_ARGS(__VA_ARGS__))(__VA_ARGS__))
+#define CONSTEXPR_LAMBDApack(...)   CONSTEXPR_LAMBDA_MACRO_EXPAND(CONSTEXPR_LAMBDA_select_based_on_arg_count(CONSTEXPR_LAMBDA_COUNT_MACRO_ARGS(__VA_ARGS__))(..., __VA_ARGS__))
+#define CONSTEXPR_LAMBDA(...)   CONSTEXPR_LAMBDA_MACRO_EXPAND(CONSTEXPR_LAMBDA_select_based_on_arg_count(CONSTEXPR_LAMBDA_COUNT_MACRO_ARGS(__VA_ARGS__))( , __VA_ARGS__))
 #define CONSTEXPR_LAMBDA_COUNT_MACRO_ARGS(...)       CONSTEXPR_LAMBDA_COUNT_MACRO_ARGS_A(unused_sdkjflkajfdl, __VA_ARGS__)
 #define CONSTEXPR_LAMBDA_COUNT_MACRO_ARGS_A(...)     CONSTEXPR_LAMBDA_MACRO_EXPAND(CONSTEXPR_LAMBDA_COUNT_MACRO_ARGS_B(__VA_ARGS__, 12,11,10,9,8,7,6,5,4,3,2,1,0))
 #define CONSTEXPR_LAMBDA_MACRO_EXPAND(x)             x
@@ -111,35 +112,38 @@ namespace CONSTEXPR_LAMBDA_namespace
             ->decltype(auto)                                                                \
             {   CONSTEXPR_LAMBDA_BODY_OF_THE_FUNCTION
 
-#define CONSTEXPR_LAMBDA_with_this_many_args_1(NAME_AND_REF_0)                   \
+#define CONSTEXPR_LAMBDA_with_this_many_args_1(CONSTEXPR_LAMBDA_maybe_pack_for_last_arg, NAME_AND_REF_0)                   \
             CONSTEXPR_LAMBDA_start_of_the_macro_stuff                                       \
-                        (                           auto && arg0                \
+                        (   auto && CONSTEXPR_LAMBDA_maybe_pack_for_last_arg arg0           \
                         )   {                                                               \
             CONSTEXPR_LAMBDA_start_the_nested_class                                         \
-            operator()  (   std::remove_reference_t<decltype(arg0)>  NAME_AND_REF_0                \
+            operator()  (   std::remove_reference_t<decltype(arg0 )> CONSTEXPR_LAMBDA_maybe_pack_for_last_arg   NAME_AND_REF_0                \
                         )                                                                   \
             ->decltype(auto)                                                                \
             {   CONSTEXPR_LAMBDA_BODY_OF_THE_FUNCTION
 
-#define CONSTEXPR_LAMBDA_with_this_many_args_2(NAME_AND_REF_0, NAME_AND_REF_1)                   \
+#define CONSTEXPR_LAMBDA_with_this_many_args_2(CONSTEXPR_LAMBDA_maybe_pack_for_last_arg, NAME_AND_REF_0, NAME_AND_REF_1)                   \
             CONSTEXPR_LAMBDA_start_of_the_macro_stuff                                       \
-                        (                           auto && arg0, auto && arg1                \
+                        (   auto &&                                             arg0        \
+                        ,   auto && CONSTEXPR_LAMBDA_maybe_pack_for_last_arg    arg1        \
                         )   {                                                               \
             CONSTEXPR_LAMBDA_start_the_nested_class                                         \
-            operator()  (   std::remove_reference_t<decltype(arg0)>  NAME_AND_REF_0                \
-                        ,   std::remove_reference_t<decltype(arg1)>  NAME_AND_REF_1                \
+            operator()  (   std::remove_reference_t<decltype(arg0)>                                             NAME_AND_REF_0                \
+                        ,   std::remove_reference_t<decltype(arg1)> CONSTEXPR_LAMBDA_maybe_pack_for_last_arg    NAME_AND_REF_1                \
                         )                                                                   \
             ->decltype(auto)                                                                \
             {   CONSTEXPR_LAMBDA_BODY_OF_THE_FUNCTION
 
-#define CONSTEXPR_LAMBDA_with_this_many_args_3(NAME_AND_REF_0, NAME_AND_REF_1, NAME_AND_REF_2)                   \
+#define CONSTEXPR_LAMBDA_with_this_many_args_3(CONSTEXPR_LAMBDA_maybe_pack_for_last_arg, NAME_AND_REF_0, NAME_AND_REF_1, NAME_AND_REF_2)                   \
             CONSTEXPR_LAMBDA_start_of_the_macro_stuff                                       \
-                        (   auto && arg0, auto && arg1, auto && arg2                        \
+                        (   auto &&                                             arg0        \
+                        ,   auto &&                                             arg1        \
+                        ,   auto && CONSTEXPR_LAMBDA_maybe_pack_for_last_arg    arg2        \
                         )   {                                                               \
             CONSTEXPR_LAMBDA_start_the_nested_class                                         \
-            operator()  (   std::remove_reference_t<decltype(arg0)>  NAME_AND_REF_0                \
-                        ,   std::remove_reference_t<decltype(arg1)>  NAME_AND_REF_1                \
-                        ,   std::remove_reference_t<decltype(arg2)>  NAME_AND_REF_2                \
+            operator()  (   std::remove_reference_t<decltype(arg0)>                                             NAME_AND_REF_0                \
+                        ,   std::remove_reference_t<decltype(arg1)>                                             NAME_AND_REF_1                \
+                        ,   std::remove_reference_t<decltype(arg2)> CONSTEXPR_LAMBDA_maybe_pack_for_last_arg    NAME_AND_REF_2                \
                         )                                                                   \
             ->decltype(auto)                                                                \
             {   CONSTEXPR_LAMBDA_BODY_OF_THE_FUNCTION
